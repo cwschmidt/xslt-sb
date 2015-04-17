@@ -1,0 +1,58 @@
+# xsb:remove-query-and-fragment-from-url(`URL` _as_ `xs:string?`) #
+
+Stylesheet: [files.xsl](http://code.google.com/p/xslt-sb/source/browse/trunk/xslt-sb/files.xsl)
+
+## Parameter ##
+`URL`: String, der als URL interpretiert wird.
+
+
+
+## Beschreibung ##
+Diese Funktion entfernt Query- und Fragment-Teil von einer URL.
+
+Die Eingabe eines Leerstringes gibt einen Leerstring zurück.
+
+Die Eingabe einer Leersequenz gibt einen Leerstring zurück.
+
+Die Eingabe einer ungültigen URL gibt einen Leerstring zurück.
+
+### Versionen ###
+| Revision | Datum | Autor | Beschreibung |
+|:---------|:------|:------|:-------------|
+| 0.74 | 2010-01-03 | Stf |   Status: beta;   initiale Version   |
+
+
+## Implementierung ##
+```
+<xsl:function xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsb="http://www.expedimentum.org/XSLT/SB" xmlns:intern="http://www.expedimentum.org/XSLT/SB/intern" xmlns:doc="http://www.CraneSoftwrights.com/ns/xslstyle" xmlns:docv="http://www.CraneSoftwrights.com/ns/xslstyle/vocabulary" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:saxon="http://saxon.sf.net/" xmlns:java-file="java:java.io.File" xmlns:java-uri="java:java.net.URI" name="xsb:remove-query-and-fragment-from-url" as="xs:string">
+		<xsl:param name="URL" as="xs:string?"/>
+		<xsl:choose>
+			<!-- per Definition muss ein eventuelles Fragment nach der Query stehen -->
+			<xsl:when test="xsb:url-has-query($URL)">
+				<xsl:sequence select="substring-before($URL, '?')"/>
+			</xsl:when>
+			<xsl:when test="xsb:url-has-fragment($URL)">
+				<xsl:sequence select="substring-before($URL, '#')"/>
+			</xsl:when>
+			<xsl:when test="xsb:is-url($URL)">
+				<xsl:sequence select="concat($URL, '')"/>
+			</xsl:when>
+			<xsl:otherwise><xsl:sequence select=" '' "/></xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+```
+
+### Benutzte Funktionen ###
+  * [xsb:is-url()](xsb_is_url.md)
+  * [xsb:url-has-fragment()](xsb_url_has_fragment.md)
+  * [xsb:url-has-query()](xsb_url_has_query.md)
+
+
+---
+
+
+_Hinweis: Die Dokumentation entstammt dem Stylesheet selbst, die Funktionen und Templates sind dort ausführlich dokumentiert._
+
+_Hinweis: Diese Wiki-Seite wird automatisch aus der Dokumentation der einzenen Stylesheets der XSLT-SB erzeugt und soll deshalb nicht bearbeitet werden._
+
+_Seite erstellt am 28.05.2012_
